@@ -10,8 +10,10 @@ web3.eth.getBlock('latest').then((data) => {
 const rootPrefix = '../'
   , coreAddresses = require(rootPrefix + '/config/core_addresses')
   , proofFacilitator = 'proofFacilitator'
-  , facilitatorContract = new web3.eth.Contract(coreAddresses.getAbiForContract(proofFacilitator)
-  , coreAddresses.getAddressesForContract(proofFacilitator))
+  , facilitatorContract = new web3.eth.Contract(
+    coreAddresses.getAbiForContract(proofFacilitator)
+  , coreAddresses.getAddressesForContract(proofFacilitator)
+  )
 ;
 
 

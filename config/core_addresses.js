@@ -24,10 +24,10 @@ const allAddresses = {
 
   contracts: {
     proofFacilitator: {
+      address: '0x21b8ae5704F69DF3674A2A05585bf73206E01624',
       abi: coreAbis.proofFacilitator,
-      bin: coreBins.proofFacilitator,
-      address: '0x21b8ae5704F69DF3674A2A05585bf73206E01624'
-    }
+      bin: coreBins.proofFacilitator
+    },
     proofVerifier: {
       abi: coreAbis.proofVerifier,
       bin: coreBins.proofVerifier
@@ -74,7 +74,7 @@ const coreAddresses = {
   // This must return array of addresses.
   getAddressesForContract: function(contractName) {
     var contractAddresses = allAddresses.contracts[contractName].address;
-    if (!contractAddresses || !Array.isArray(contractAddresses) || contractAddresses.length===0) {
+    if (!contractAddresses  || contractAddresses.length===0) {
       throw "Please pass valid contractName to get contract address for: "+contractName;
     }
     return contractAddresses;

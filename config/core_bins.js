@@ -17,8 +17,8 @@ const rootPrefix = "..";
 
 const coreBins = {
   proofVerifier: readFile(rootPrefix + '/contracts/bin/proofVerifier.bin', 'utf8'),
-  proofOfStake: parseFile(rootPrefix + '/contracts/abi/ProofOfStake.bin', "utf8"),
-  proofFacilitators: parseFile(rootPrefix + '/contracts/abi/ProofFacilitators.bin', "utf8")
+  proofOfStake: readFile(rootPrefix + '/contracts/bin/ProofOfStake.bin', "utf8"),
+  proofFacilitator: readFile(rootPrefix + '/contracts/bin/ProofFacilitator.bin', "utf8")
 };
 
 module.exports = coreBins;
