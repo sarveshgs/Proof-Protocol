@@ -25,3 +25,9 @@ We want to build a Proof protocol which does below things:
 - ProofOfStake(POS).registerToVote
 - ProofOfStake(POS).performVerification
 - ProofOfStake(POS).finalize
+
+
+### Steps To Run
+
+- npm install
+- 
