@@ -27,15 +27,16 @@ pragma solidity ^0.4.23;
  */
 contract ProofOfStake {
 
-    event ProofVerificationStarted(bytes32 _requestId, bytes _position, uint256 _startBlockTime, uint256 _endBlockTime);
-    event ProofVerifierRegistered(address ProofVerifier, bytes _bounty);
-    event ProofVerificationDone(address ProofVerifier, bool _isProven);
+    event ProofVerificationStarted(bytes32 _requestId, uint256 _startBlockTime, uint256 _endBlockTime);
+    event ProofVerifierRegistered(address _proofVerifier, bytes32 _requestId);
+    event ProofVerificationDone(address _proofVerifier, bool _isProven);
 
     uint256 proofVerificationStartingBlockNumber;
     uint256 proofVerificationEndingBlockNumber;
+    uint256 voteWaitTimeInBlocks;
     address proofFacilitator;
     bool hasProofVerificationStarted;
-    bytes requestId;
+    bytes32 requestId;
 
     struct ProofVerifier {
         address proofVerifier;
@@ -46,9 +47,14 @@ contract ProofOfStake {
     mapping(address => ProofVerifier) proofVerifiedBy;
     address[] proofVerifiers;
 
+
+    modifier onlyProofVerifiers(){
+        _;
+    }
+
     constructor(
         bytes32 _requestId,
-        uint256 _voteWaitingTimeInBlocks)
+        uint256 _voteWaitTimeInBlocks)
     {
         requestId = _requestId;
         voteWaitTimeInBlocks = _voteWaitTimeInBlocks;
@@ -63,23 +69,21 @@ contract ProofOfStake {
         proofVerificationStartingBlockNumber = block.number;
         proofVerificationEndingBlockNumber = proofVerificationStartingBlockNumber + voteWaitTimeInBlocks;
 
-        emit ProofVerificationStarted(requestId, position, proofVerificationStartingBlockNumber, proofVerificationEndingBlockNumber);
+        emit ProofVerificationStarted(requestId, proofVerificationStartingBlockNumber, proofVerificationEndingBlockNumber);
     }
 
     // TODO Move to registered contract
     function registerToVote()
         onlyProofVerifiers
-        payable
     {
         require(hasProofVerificationStarted == true, "Voting should already be started!");
         require(block.number <= proofVerificationEndingBlockNumber, "registration is expired!");
-        require(proofVerifiedBy[msg.sender] == 0, "You have already registered!");
+        require(proofVerifiedBy[msg.sender].proofVerifier == address(0), "You have already registered!");
         require(msg.value > 0);
 
         proofVerifiers.push(msg.sender);
-        proofVerifiedBy[msg.sender] = new ProofVerifier(msg.sender, msg.value, false);
-
-        emit ProofVerifierRegistered(msg.sender, msg.value);
+        proofVerifiedBy[msg.sender] =  ProofVerifier(msg.sender, false, false);
+        emit ProofVerifierRegistered(msg.sender, requestId);
     }
 
     function performVerification(
@@ -87,7 +91,7 @@ contract ProofOfStake {
         onlyProofVerifiers
     {
         require(hasProofVerificationStarted == true, "Voting is not started yet!");
-        require(block <= proofVerificationEndingBlockNumber, "Voting is expired!");
+        require(block.number <= proofVerificationEndingBlockNumber, "Voting is expired!");
         require(proofVerifiedBy[msg.sender].hasVoted == false, "msg.sender has already voted!");
         proofVerifiedBy[msg.sender].isProven = isProven;
 

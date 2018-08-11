@@ -1,10 +1,19 @@
 pragma solidity ^0.4.23;
 
+import "./ProofOfStake.sol";
+
 contract ProofFacilitator {
 
     /* events */
-    event Registered(bytes32 _uuid, bytes _name, bytes _chainId);
-    event ProofRequiredEvent(bytes32 _uuid, bytes32 _requestId, address _contractAddress, bytes _position);
+    event Registered(bytes32 _uuid,
+        bytes _name,
+        bytes _chainId);
+
+    event ProofRequestedEvent(bytes32 _uuid,
+        bytes32 _requestId,
+        address _contractAddress,
+        bytes _position,
+        address proofOfStake);
 
     struct Registration {
         bytes name;
@@ -16,13 +25,14 @@ contract ProofFacilitator {
         address contractAddress;
         bytes position;
         uint256 amount;
+        address proofOfStake;
     }
     address owner;
 
     mapping(address => uint) nonces;
     mapping(bytes32 => ProofRequest) requests;
     mapping(bytes32 => Registration) registrations;
-
+    uint256 voteWaitingTimeInBlocks = 100;
     constructor(){
         owner = msg.sender;
     }
@@ -66,8 +76,10 @@ contract ProofFacilitator {
 
         bytes32 requestId = keccak256(abi.encodePacked(msg.sender, nonces[msg.sender]));
 
-        requests[requestId] = ProofRequest(uuid, contractAddress, position, fee);
-        emit ProofRequiredEvent(uuid, requestId, contractAddress, position);
+        ProofOfStake pos = new ProofOfStake(requestId, voteWaitingTimeInBlocks);
+        requests[requestId] = ProofRequest(uuid, contractAddress, position, fee, pos);
+
+        emit ProofRequestedEvent(uuid, requestId, contractAddress, position, pos);
     }
 
 

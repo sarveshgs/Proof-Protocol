@@ -1,1 +1,22 @@
-{}
+{
+  "0x29e5a7aef42fb13e473818b13d574bd4a3174329138deb390d4f69ce4c3189da": {
+    "contracts": {
+      "0x2b90f3dbb3b62744db86bf69b8612802caee9e9c72d64c58a1d1dde856fd395f": {
+        "name": "ProofFacilitator",
+        "address": "0x01f4E15952224FfA85f01fE6A445e7A91133a8A8"
+      },
+      "0x43ae23f97c0d1e2c16434003a605136edd9f2c56ee96775964623513171ac4fc": {
+        "name": "ProofFacilitator",
+        "address": "0xc0e33613412f7c69873260Be1BDec5434c9895d5"
+      },
+      "0x7d3a2ac88802fe0e1a2fe57e25d4514a1a26ce78818a788b5bfd2d271e529686": {
+        "name": "ProofFacilitator",
+        "address": "0x8eB205F234Fd90d9B1EA49C1af8693F38b65EC34"
+      },
+      "0x041d78dbd397b8c07c41800f7bf0400100c8c5c3b499d9049b2301a5865ec4c0": {
+        "name": "ProofFacilitator",
+        "address": "0x379eFD3f443Bd837623CF550C7b18Ec8b5635075"
+      }
+    }
+  }
+}
