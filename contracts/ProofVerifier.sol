@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-contract ProofVerifiers {
+contract ProofVerifier {
 
     event ProofVerifierRegistered(address _verifier, uint256 _stakeAmount);
     event UnStaked(address _verifier, uint256 _unstakeAmount);

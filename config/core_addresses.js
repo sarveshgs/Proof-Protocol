@@ -16,17 +16,18 @@ const rootPrefix = ".."
 
 const allAddresses = {
   users: {
-    deployer: {
-      address: process.env.OST_UTILITY_DEPLOYER_ADDR,
-      passphrase: process.env.OST_UTILITY_DEPLOYER_PASSPHRASE
-    },
-    ops: {
-      address: process.env.OST_UTILITY_OPS_ADDR,
-      passphrase: process.env.OST_UTILITY_OPS_PASSPHRASE
+    proofVerifier: {
+      address: '0xda932fc0d5bd5AC06fB2CeCF72Ab05b9CFEE7808',
+      passphrase: 'sweethome'
     }
   },
 
   contracts: {
+    proofFacilitator: {
+      abi: coreAbis.proofFacilitator,
+      bin: coreBins.proofFacilitator,
+      address: '0x21b8ae5704F69DF3674A2A05585bf73206E01624'
+    }
     proofVerifier: {
       abi: coreAbis.proofVerifier,
       bin: coreBins.proofVerifier

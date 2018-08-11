@@ -19,7 +19,7 @@ const rootPrefix = "..";
 const coreAbis = {
   proofVerifier: parseFile(rootPrefix + '/contracts/abi/ProofVerifier.abi', "utf8"),
   proofOfStake: parseFile(rootPrefix + '/contracts/abi/ProofOfStake.abi', "utf8"),
-  proofFacilitators: parseFile(rootPrefix + '/contracts/abi/ProofFacilitators.abi', "utf8")
+  proofFacilitators: parseFile(rootPrefix + '/contracts/abi/ProofFacilitator.abi', "utf8")
 };
 
 module.exports = coreAbis;
