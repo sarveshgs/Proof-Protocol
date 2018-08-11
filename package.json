@@ -10,11 +10,8 @@
   "homepage": "",
   "devDependencies": {},
   "dependencies": {
-<<<<<<< HEAD
     "bignumber.js": "4.1.0",
-    "web3": "1.0.0-beta.34"
-=======
-    "web3": "^1.0.0-beta.35"
->>>>>>> Added blockscanner and contract refactoring
+    "web3": "1.0.0-beta.34",
+    "ethereumjs-tx": "^1.3.4"
   }
 }
