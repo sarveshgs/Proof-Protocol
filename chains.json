@@ -16,6 +16,26 @@
       "0x041d78dbd397b8c07c41800f7bf0400100c8c5c3b499d9049b2301a5865ec4c0": {
         "name": "ProofFacilitator",
         "address": "0x379eFD3f443Bd837623CF550C7b18Ec8b5635075"
+      },
+      "0x33d00b46029ff9b370805d55e48d18ed5a384400fe457943d253514f31a901c2": {
+        "name": "ProofFacilitator",
+        "address": "0xB68bca7Dc5afA19E6E727456a9c9Ba7f61496a98"
+      },
+      "0xa1eb2e5384b238f8454819bdc435d8291e75e6005f687db6c9ec662fedf49b7c": {
+        "name": "ProofFacilitator",
+        "address": "0xC874a7b0F9182f73B086AeE4d3838F1889197Ce5"
+      },
+      "0x77351d9e94c307d212f387b939ac2ceb53e5cebbb8371a009e908085363b0ccc": {
+        "name": "ProofOfStake",
+        "address": "0x05d3a3c0f1d482a455c294f27Ef058Ab9a6d4aaf"
+      },
+      "0xdbc75bfb03899a5c515f7f60696544a132b595396e74003e4433af7effdae613": {
+        "name": "ProofVerifier",
+        "address": "0x6110fD6b047F67AdF26dF6c5931B3011c4407fe9"
+      },
+      "0x1f5578361c20695f73ac18dd50c8d6eafeced0f3b0a9cf2b67326ef3421d48b8": {
+        "name": "ProofVerifier",
+        "address": "0x5EF165280ef37e20C1C395E5482Bd5C12b6D419f"
       }
     }
   }

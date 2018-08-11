@@ -33,9 +33,9 @@ module.exports = {
     gas: "auto",
     contracts: {
       // example:
-      //SimpleStorage: {
-      //  args: [ 100 ]
-      //}
+      ProofOfStake: {
+        args: ["0x01", 100]
+      }
     }
   }
 };
