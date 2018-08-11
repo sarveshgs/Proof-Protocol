@@ -9,8 +9,8 @@ const rootPrefix = '../'
     , proofVerifierPassphrase = coreAddresses.getPassphraseForUser(proofVerifier)
     , facilitatorContract = new web3Provider.eth.Contract(proofFacilitatorAbi, proofFacilitatorAddress)
     , proofOfStake = require(rootPrefix + '/lib/contract_interact/proof_of_stake')
-    , gasPrice = 0x12A05F200
-    , returnTypes = require(rootPrefix + 'lib/contract_interact/return_types')
+    , gasPrice = 0x174876E800
+    , returnTypes = require(rootPrefix + 'lib/global_constant/return_types')
 ;
 
 
@@ -19,19 +19,20 @@ web3Provider.eth.getBlock('latest').then((data) => {
 });
 
 
-
-
 facilitatorContract.events.ProofRequestedEvent(null, function (error, ProofRequestedResult) {
   if(error) {
     console.log("error  ", error);
   }
   console.log("ProofRequestedEvent result  ", ProofRequestedResult);
 
-  execute(ProofRequestedResult.returnValues.Result._ProofOfStake);
+  execute(ProofRequestedResult.returnValues._proofOfStake).then(() => {
+    console.log("yaayy done!!! book your cab")
+  });
 });
 
 async function execute(proofOfStakeAddress) {
 
+    console.log("proofOfStakeAddress  ", proofOfStakeAddress);
     let proofOfStakeObject =  new proofOfStake(proofOfStakeAddress);
 
     let startVotingResult = await proofOfStakeObject.startVoting(proofVerifierAddress, proofVerifierPassphrase,
