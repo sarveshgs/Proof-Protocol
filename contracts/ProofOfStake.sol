@@ -120,7 +120,7 @@ contract ProofOfStake {
         uint256 negativeVotes = 0;
         for (uint256 i=0; i<totalVotes; i++) {
             address proofVerifier = proofVerifiers[i];
-            ProofVerifier proofData = proofVerifiedData[proofVerifier];
+            ProofVerifier storage proofData = proofVerifiedData[proofVerifier];
             if (proofData.hasVoted) {
                 if (proofData.isProven){
                     positiveVotes++ ;

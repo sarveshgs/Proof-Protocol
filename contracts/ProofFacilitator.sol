@@ -52,8 +52,7 @@ contract ProofFacilitator {
         require(name.length != 0);
         require(chainId.length != 0);
 
-
-        bytes32 uuid = keccak256(name, chainId);
+        bytes32 uuid = keccak256(abi.encodePacked(name, chainId));
 
         require(registrations[uuid].name.length == 0);
 
@@ -86,6 +85,5 @@ contract ProofFacilitator {
 
         emit ProofRequestedEvent(uuid, requestId, contractAddress, position, pos, data);
     }
-
 
 }
