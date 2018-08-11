@@ -10,6 +10,6 @@
   "homepage": "",
   "devDependencies": {},
   "dependencies": {
-    "big-number": "^1.0.0"
+    "bignumber.js": "4.1.0"
   }
 }
