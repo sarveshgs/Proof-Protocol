@@ -35,16 +35,18 @@ contract ProofFacilitator {
     mapping(bytes32 => ProofRequest) requests;
     mapping(bytes32 => Registration) registrations;
     uint256 voteWaitingTimeInBlocks = 100;
+    address public proofVerifier;
 
     modifier onlyOwner(){
         require(msg.sender == owner);
         _;
     }
 
-    constructor()
+    constructor(address _proofVerifier)
         public
     {
         owner = msg.sender;
+        proofVerifier = _proofVerifier;
     }
 
     function register(
@@ -85,7 +87,7 @@ contract ProofFacilitator {
 
         bytes32 requestId = keccak256(abi.encodePacked(msg.sender, nonces[msg.sender]));
 
-        ProofOfStake pos = new ProofOfStake(requestId, voteWaitingTimeInBlocks);
+        ProofOfStake pos = new ProofOfStake(proofVerifier, requestId, voteWaitingTimeInBlocks);
         //todo send ether to pos
 
         requests[requestId] = ProofRequest(uuid, contractAddress, position, data, fee, pos);

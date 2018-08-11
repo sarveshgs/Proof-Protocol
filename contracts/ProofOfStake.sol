@@ -41,10 +41,9 @@ contract ProofOfStake {
     uint256 public proofVerificationStartingBlockNumber;
     uint256 public proofVerificationEndingBlockNumber;
     uint256 public voteWaitTimeInBlocks;
-    address public proofFacilitator;
     bool public hasProofVerificationStarted;
     bytes32 public requestId;
-    address proofFacilitators;
+    address public proofVerifier;
 
     struct ProofVerifier {
         address proofVerifier;
@@ -57,15 +56,17 @@ contract ProofOfStake {
 
 
     modifier onlyProofVerifiers(){
-        require(ProofVerifiersInterface(proofFacilitators).isProofVerifier(msg.sender));
+        require(ProofVerifiersInterface(proofVerifier).isProofVerifier(msg.sender));
         _;
     }
 
     constructor(
+        address _proofVerifier,
         bytes32 _requestId,
         uint256 _voteWaitTimeInBlocks)
         public
     {
+        proofVerifier = _proofVerifier;
         requestId = _requestId;
         voteWaitTimeInBlocks = _voteWaitTimeInBlocks;
     }
@@ -121,8 +122,8 @@ contract ProofOfStake {
         uint256 positiveVotes = 0;
         uint256 negativeVotes = 0;
         for (uint256 i=0; i<totalVotes; i++) {
-            address proofVerifier = proofVerifiers[i];
-            ProofVerifier storage proofData = proofVerifiedData[proofVerifier];
+            address pvAddress = proofVerifiers[i];
+            ProofVerifier storage proofData = proofVerifiedData[pvAddress];
             if (proofData.hasVoted) {
                 if (proofData.isProven){
                     positiveVotes++ ;
