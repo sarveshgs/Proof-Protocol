@@ -35,7 +35,9 @@ contract ProofOfStake {
     event ProofVerificationStarted(bytes32 _requestId, uint256 _startBlockTime, uint256 _endBlockTime);
     event ProofVerifierRegistered(address _proofVerifier, bytes32 _requestId);
     event ProofVerificationDone(address _proofVerifier, bool _isProven);
+    event ProofFinalized(bytes32 _requestId, bool status);
 
+    uint256 constant majorityThreshold = 67;
     uint256 public proofVerificationStartingBlockNumber;
     uint256 public proofVerificationEndingBlockNumber;
     uint256 public voteWaitTimeInBlocks;
@@ -50,7 +52,7 @@ contract ProofOfStake {
         bool isProven; /** Proof verification is true/false */
     }
 
-    mapping(address => ProofVerifier) public proofVerifiedBy;
+    mapping(address => ProofVerifier) public proofVerifiedData;
     address[] public proofVerifiers;
 
 
@@ -80,14 +82,13 @@ contract ProofOfStake {
         emit ProofVerificationStarted(requestId, proofVerificationStartingBlockNumber, proofVerificationEndingBlockNumber);
     }
 
-    // TODO Move to registered contract
     function registerToVote()
         public
         onlyProofVerifiers
     {
         require(hasProofVerificationStarted == true, "Voting should already be started!");
         require(block.number <= proofVerificationEndingBlockNumber, "registration is expired!");
-        require(proofVerifiedBy[msg.sender].proofVerifier == address(0), "You have already registered!");
+        require(proofVerifiedData[msg.sender].proofVerifier == address(0), "You have already registered!");
         register(msg.sender);
         emit ProofVerifierRegistered(msg.sender, requestId);
     }
@@ -99,23 +100,43 @@ contract ProofOfStake {
     {
         require(hasProofVerificationStarted == true, "Voting is not started yet!");
         require(block.number <= proofVerificationEndingBlockNumber, "Voting is expired!");
-        require(proofVerifiedBy[msg.sender].hasVoted == false, "msg.sender has already voted!");
-        proofVerifiedBy[msg.sender].isProven = isProven;
+        require(proofVerifiedData[msg.sender].hasVoted == false, "msg.sender has already voted!");
+        proofVerifiedData[msg.sender].isProven = isProven;
 
         ProofVerificationDone(msg.sender, isProven);
     }
 
-    // TODO Discuss
+    // TODO Discuss reward
     function finalize()
         public
         onlyProofVerifiers
+        returns (bool)
     {
-
         require(hasProofVerificationStarted == true);
         require(block.number > proofVerificationEndingBlockNumber);
 
-        //logic to return stakedAmount, claim stakedAmount , distribute reward
+        uint256 totalVotes = proofVerifiers.length;
+        uint256 positiveVotes = 0;
+        uint256 negativeVotes = 0;
+        for (uint256 i=0; i<totalVotes; i++) {
+            address proofVerifier = proofVerifiers[i];
+            ProofVerifier proofData = proofVerifiedData[proofVerifier];
+            if (proofData.hasVoted) {
+                if (proofData.isProven){
+                    positiveVotes++ ;
+                } else {
+                    negativeVotes++;
+                }
+            }
+        }
 
+        if (positiveVotes>negativeVotes){
+            ProofFinalized(requestId, true);
+            return true;
+        } else {
+            ProofFinalized(requestId, false);
+            return false;
+        }
     }
 
     function register(
@@ -123,7 +144,7 @@ contract ProofOfStake {
         private
     {
         proofVerifiers.push(_proofVerifier);
-        proofVerifiedBy[_proofVerifier] =  ProofVerifier(_proofVerifier, false, false);
+        proofVerifiedData[_proofVerifier] =  ProofVerifier(_proofVerifier, false, false);
     }
 
 
