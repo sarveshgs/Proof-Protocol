@@ -2,81 +2,73 @@ pragma solidity ^0.4.23;
 
 contract ProofFacilitator {
 
-    event Registered(bytes32 clientId);
-    event ProofRequiredEvent(bytes32 client, bytes32 requestId, address contractAddress, bytes position);
+    /* events */
+    event Registered(bytes32 _uuid, bytes _name, bytes _chainId);
+    event ProofRequiredEvent(bytes32 _uuid, bytes32 _requestId, address _contractAddress, bytes _position);
 
     struct Registration {
-        bytes uuid;
+        bytes name;
         bytes chainId;
     }
 
     struct ProofRequest {
-        bytes32 client;
+        bytes32 uuid;
         address contractAddress;
         bytes position;
         uint256 amount;
     }
-
-
     address owner;
-    uint256 constant fees = 10000;
 
     mapping(address => uint) nonces;
     mapping(bytes32 => ProofRequest) requests;
     mapping(bytes32 => Registration) registrations;
 
     constructor(){
-        msg.sender = owner;
+        owner = msg.sender;
     }
 
     modifier onlyOwner(){
         require(msg.sender == owner);
+        _;
     }
 
-    //Todo Add more param
     function register(
-        bytes uuid,
+        bytes name,
         bytes chainId)
     returns (bytes32 client){
-        require(chainId != '');
-        require(uuid != '');
-        bytes32 clientId = keccak256(uuid, clientId);
-        require(registrations[clientId] == 0);
-        registrations[clientId] = new Registration(uuid, clientId);
-        emit Registered(clientId);
+
+        require(name.length != 0);
+        require(chainId.length != 0);
+
+
+        bytes32 uuid = keccak256(name, chainId);
+
+        require(registrations[uuid].name.length == 0);
+
+        registrations[uuid] = Registration(name, chainId);
+        emit Registered(uuid, name, chainId);
     }
 
     function requestProof(
-        bytes32 client,
+        bytes32 uuid,
         address contractAddress,
         bytes position)
     payable
     {
-        uint256 feeReceived = msg.value;
-        require(feeReceived >= fees);
+        require(uuid != bytes32(0));
+        require(contractAddress != address(0));
+
+        uint256 fee = msg.value;
+
         uint256 nonce = nonces[msg.sender];
+
         nonces[msg.sender] = nonce + 1;
-        bytes32 requestId = hashRequestKey(msg.sender, nonces[msg.sender]);
-        requests[requestId] = new Request(client, contractAddress, position, feeReceived);
-        emit ProofRequiredEvent(client, requestId, contractAddress, position);
+
+        bytes32 requestId = keccak256(abi.encodePacked(msg.sender, nonces[msg.sender]));
+
+        requests[requestId] = ProofRequest(uuid, contractAddress, position, fee);
+        emit ProofRequiredEvent(uuid, requestId, contractAddress, position);
     }
 
 
-    function changeFee(
-        uint256 proposedFee)
-    onlyOwner
-    {
-        require(proposedFee > 0);
-        fee = proposedFee;
-    }
-
-    function hashRequestKey(
-        address _account,
-        uint256 _nonce)
-    public
-    pure
-    returns (bytes32)
-    {
-        return keccak256(abi.encodePacked(_account, _nonce));
-    }
 }
