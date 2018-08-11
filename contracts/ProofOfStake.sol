@@ -19,6 +19,9 @@
 
 pragma solidity ^0.4.23;
 
+import "./SafeMath.sol";
+import "./ProofFacilitatorsInterface.sol";
+
 /**
  *  @title Voting contract.
  *
@@ -39,6 +42,7 @@ contract ProofOfStake {
     address public proofFacilitator;
     bool public hasProofVerificationStarted;
     bytes32 public requestId;
+    address proofFacilitators;
 
     struct ProofVerifier {
         address proofVerifier;
@@ -49,7 +53,9 @@ contract ProofOfStake {
     mapping(address => ProofVerifier) public proofVerifiedBy;
     address[] public proofVerifiers;
 
+
     modifier onlyProofVerifiers(){
+        require(ProofFacilitatorsInterface(proofFacilitators).isProofVerifier(msg.sender));
         _;
     }
 
@@ -69,7 +75,7 @@ contract ProofOfStake {
         hasProofVerificationStarted = true;
         proofVerificationStartingBlockNumber = block.number;
         proofVerificationEndingBlockNumber = proofVerificationStartingBlockNumber.add(voteWaitTimeInBlocks);
-        performRegister(msg.sender);
+        register(msg.sender);
 
         emit ProofVerificationStarted(requestId, proofVerificationStartingBlockNumber, proofVerificationEndingBlockNumber);
     }
@@ -82,7 +88,7 @@ contract ProofOfStake {
         require(hasProofVerificationStarted == true, "Voting should already be started!");
         require(block.number <= proofVerificationEndingBlockNumber, "registration is expired!");
         require(proofVerifiedBy[msg.sender].proofVerifier == address(0), "You have already registered!");
-        doRegister(msg.sender);
+        register(msg.sender);
         emit ProofVerifierRegistered(msg.sender, requestId);
     }
 
@@ -112,12 +118,12 @@ contract ProofOfStake {
 
     }
 
-    function performRegister(
-        address ProofVerifier)
+    function register(
+        address _proofVerifier)
         private
     {
-        proofVerifiers.push(msg.sender);
-        proofVerifiedBy[msg.sender] =  ProofVerifier(msg.sender, false, false);
+        proofVerifiers.push(_proofVerifier);
+        proofVerifiedBy[_proofVerifier] =  ProofVerifier(_proofVerifier, false, false);
     }
 
 

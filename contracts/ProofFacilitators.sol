@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 
 import "./ProofOfStake.sol";
 
-contract ProofFacilitator {
+contract ProofFacilitators {
 
     /* events */
     event Registered(bytes32 _uuid,
