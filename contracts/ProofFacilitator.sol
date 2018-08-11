@@ -35,19 +35,23 @@ contract ProofFacilitator {
     mapping(bytes32 => ProofRequest) requests;
     mapping(bytes32 => Registration) registrations;
     uint256 voteWaitingTimeInBlocks = 100;
-    constructor(){
-        owner = msg.sender;
-    }
 
     modifier onlyOwner(){
         require(msg.sender == owner);
         _;
     }
 
+    constructor()
+        public
+    {
+        owner = msg.sender;
+    }
+
     function register(
         bytes name,
         bytes chainId)
-    returns (bytes32 client){
+        public
+        returns (bytes32 client){
 
         require(name.length != 0);
         require(chainId.length != 0);
@@ -58,6 +62,8 @@ contract ProofFacilitator {
 
         registrations[uuid] = Registration(name, chainId);
         emit Registered(uuid, name, chainId);
+
+        return uuid;
     }
 
     function requestProof(
@@ -65,7 +71,8 @@ contract ProofFacilitator {
         address contractAddress,
         bytes position,
         bytes data)
-    payable
+        public
+        payable
     {
         require(uuid != bytes32(0));
         require(contractAddress != address(0));

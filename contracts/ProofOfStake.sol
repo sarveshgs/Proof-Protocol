@@ -64,6 +64,7 @@ contract ProofOfStake {
     constructor(
         bytes32 _requestId,
         uint256 _voteWaitTimeInBlocks)
+        public
     {
         requestId = _requestId;
         voteWaitTimeInBlocks = _voteWaitTimeInBlocks;
@@ -90,6 +91,7 @@ contract ProofOfStake {
         require(block.number <= proofVerificationEndingBlockNumber, "registration is expired!");
         require(proofVerifiedData[msg.sender].proofVerifier == address(0), "You have already registered!");
         register(msg.sender);
+
         emit ProofVerifierRegistered(msg.sender, requestId);
     }
 
@@ -103,7 +105,7 @@ contract ProofOfStake {
         require(proofVerifiedData[msg.sender].hasVoted == false, "msg.sender has already voted!");
         proofVerifiedData[msg.sender].isProven = isProven;
 
-        ProofVerificationDone(msg.sender, isProven);
+        emit ProofVerificationDone(msg.sender, isProven);
     }
 
     // TODO Discuss and refine reward
@@ -131,10 +133,10 @@ contract ProofOfStake {
         }
 
         if (positiveVotes>negativeVotes){
-            ProofFinalized(requestId, true);
+            emit ProofFinalized(requestId, true);
             return true;
         } else {
-            ProofFinalized(requestId, false);
+            emit ProofFinalized(requestId, false);
             return false;
         }
     }

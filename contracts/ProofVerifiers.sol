@@ -35,6 +35,7 @@ contract ProofVerifiers {
     function isProofVerifier(
         address proofVerifier)
         public
+        view
         returns(bool /*true/false*/)
     {
         return verifiers[proofVerifier] > 0 ? true : false;
