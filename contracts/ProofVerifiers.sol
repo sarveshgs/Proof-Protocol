@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 contract ProofVerifiers {
 
     event ProofVerifierRegistered(address _verifier, uint256 _stakeAmount);
-    event Unstaked(address _verifier, uint256 _unstakeAmount);
+    event UnStaked(address _verifier, uint256 _unstakeAmount);
 
     mapping(address => uint256 /*stake*/) public verifiers;
 
@@ -29,7 +29,7 @@ contract ProofVerifiers {
 
         verifiers[msg.sender] = verifiers[msg.sender] - amount;
 
-        emit Unstaked(msg.sender, amount);
+        emit UnStaked(msg.sender, amount);
     }
 
     function isProofVerifier(
