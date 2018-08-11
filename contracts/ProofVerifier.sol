@@ -7,7 +7,9 @@ contract ProofVerifier {
 
     mapping(address => uint256 /*stake*/) verifiers;
 
-    function register() payable {
+    function register()
+        payable
+    {
         uint256 stakeAmount = msg.value;
 
         require(verifiers[msg.sender] == 0);
@@ -15,7 +17,9 @@ contract ProofVerifier {
         verifiers[msg.sender] = stakeAmount;
     }
 
-    function unstake(uint256 amount){
+    function unstake(
+        uint256 amount)
+    {
         require(verifiers[msg.sender] != 0);
         require(verifiers[msg.sender] > amount);
 
@@ -24,7 +28,10 @@ contract ProofVerifier {
         emit Unstaked(msg.sender, amount);
     }
 
-    function isProofVerifier(address proofVerifier) returns(bool /*true/false*/){
+    function isProofVerifier(
+        address proofVerifier)
+        returns(bool /*true/false*/)
+    {
         return verifiers[proofVerifier] > 0 ? true : false;
     }
 }

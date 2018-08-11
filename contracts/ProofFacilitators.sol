@@ -63,7 +63,7 @@ contract ProofFacilitators {
         bytes32 uuid,
         address contractAddress,
         bytes position)
-    payable
+        payable
     {
         require(uuid != bytes32(0));
         require(contractAddress != address(0));

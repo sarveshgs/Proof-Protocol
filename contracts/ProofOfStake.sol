@@ -106,7 +106,7 @@ contract ProofOfStake {
         ProofVerificationDone(msg.sender, isProven);
     }
 
-    // TODO Discuss reward
+    // TODO Discuss and refine reward
     function finalize()
         public
         onlyProofVerifiers
