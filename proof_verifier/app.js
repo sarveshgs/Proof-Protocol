@@ -1,25 +1,24 @@
-const Web3 = require('web3'),
-  web3 = new Web3(new Web3.providers.WebsocketProvider(
-    'wss://ropsten.infura.io/ws/60efce1f07d74c0eab6163d7c86ed517'
-  ));
+const rootPrefix = '../'
+    , web3Provider = require(rootPrefix + '/lib/web3/providers/ws')
+    , coreAddresses = require(rootPrefix + '/config/core_addresses')
+    , proofFacilitator = 'proofFacilitator'
+    , proofFacilitatorAbi = coreAddresses.getAbiForContract(proofFacilitator)
+    , proofFacilitatorAddress = coreAddresses.getAddressesForContract(proofFacilitator)
+    , proofVerifier = 'proofVerifier'
+    , proofVerifierAddress = coreAddresses.getAddressForUser(proofVerifier)
+    , proofVerifierPassphrase = coreAddresses.getPassphraseForUser(proofVerifier)
+    , facilitatorContract = new web3Provider.eth.Contract(proofFacilitatorAbi, proofFacilitatorAddress)
+    , proofOfStake = require(rootPrefix + '/lib/contract_interact/proof_of_stake')
+    , gasPrice = 0x12A05F200
+    , returnTypes = require(rootPrefix + 'lib/contract_interact/return_types')
+;
 
-web3.eth.getBlock('latest').then((data) => {
+
+web3Provider.eth.getBlock('latest').then((data) => {
     console.log(data);
 });
 
-const rootPrefix = '../'
-  , coreAddresses = require(rootPrefix + '/config/core_addresses')
-  , proofFacilitator = 'proofFacilitator'
-  , proofFacilitatorAbi = coreAddresses.getAbiForContract(proofFacilitator)
-  , proofFacilitatorAddress = coreAddresses.getAddressesForContract(proofFacilitator)
-  , proofVerifier = 'proofVerifier'
-  , proofVerifierAddress = coreAddresses.getAddressForUser(proofVerifier)
-  , proofVerifierPassphrase = coreAddresses.getPassphraseForUser(proofVerifier)
-  , facilitatorContract = new web3.eth.Contract(proofFacilitatorAbi, proofFacilitatorAddress)
-  , proofOfStake = require(rootPrefix + '/lib/contract_interact/proof_of_stake')
-  , gasPrice = 0x12A05F200
-  , returnTypes = require(rootPrefix + 'lib/contract_interact/return_types')
-;
+
 
 
 facilitatorContract.events.ProofRequestedEvent(null, function (error, ProofRequestedResult) {
