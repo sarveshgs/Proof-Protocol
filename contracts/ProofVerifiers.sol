@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-contract ProofVerifier {
+contract ProofVerifiers {
 
     event ProofVerifierRegistered(address _verifier, uint256 _stakeAmount);
     event Unstaked(address _verifier, uint256 _unstakeAmount);
@@ -11,10 +11,7 @@ contract ProofVerifier {
         payable
     {
         uint256 stakeAmount = msg.value;
-
-        require(verifiers[msg.sender] == 0);
-
-        verifiers[msg.sender] = stakeAmount;
+        verifiers[msg.sender] += stakeAmount;
     }
 
     function unstake(
@@ -34,4 +31,5 @@ contract ProofVerifier {
     {
         return verifiers[proofVerifier] > 0 ? true : false;
     }
+
 }

@@ -34,7 +34,7 @@ module.exports = {
     contracts: {
       // example:
       ProofOfStake: {
-        args: ["0x01", 100]
+        "deploy": false
       }
     }
   }

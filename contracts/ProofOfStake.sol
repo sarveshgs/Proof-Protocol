@@ -20,7 +20,7 @@
 pragma solidity ^0.4.23;
 
 import "./SafeMath.sol";
-import "./ProofFacilitatorsInterface.sol";
+import "./ProofVerifiersInterface.sol";
 
 /**
  *  @title Voting contract.
@@ -57,7 +57,7 @@ contract ProofOfStake {
 
 
     modifier onlyProofVerifiers(){
-        require(ProofFacilitatorsInterface(proofFacilitators).isProofVerifier(msg.sender));
+        require(ProofVerifiersInterface(proofFacilitators).isProofVerifier(msg.sender));
         _;
     }
 

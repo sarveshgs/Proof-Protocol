@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 
 import "./ProofOfStake.sol";
 
-contract ProofFacilitators {
+contract ProofFacilitator {
 
     /* events */
     event Registered(bytes32 _uuid,
@@ -13,7 +13,8 @@ contract ProofFacilitators {
         bytes32 _requestId,
         address _contractAddress,
         bytes _position,
-        address proofOfStake);
+        address proofOfStake,
+        bytes data);
 
     struct Registration {
         bytes name;
@@ -24,6 +25,7 @@ contract ProofFacilitators {
         bytes32 uuid;
         address contractAddress;
         bytes position;
+        bytes data;
         uint256 amount;
         address proofOfStake;
     }
@@ -62,8 +64,9 @@ contract ProofFacilitators {
     function requestProof(
         bytes32 uuid,
         address contractAddress,
-        bytes position)
-        payable
+        bytes position,
+        bytes data)
+    payable
     {
         require(uuid != bytes32(0));
         require(contractAddress != address(0));
@@ -77,9 +80,11 @@ contract ProofFacilitators {
         bytes32 requestId = keccak256(abi.encodePacked(msg.sender, nonces[msg.sender]));
 
         ProofOfStake pos = new ProofOfStake(requestId, voteWaitingTimeInBlocks);
-        requests[requestId] = ProofRequest(uuid, contractAddress, position, fee, pos);
+        //todo send ether to pos
 
-        emit ProofRequestedEvent(uuid, requestId, contractAddress, position, pos);
+        requests[requestId] = ProofRequest(uuid, contractAddress, position, data, fee, pos);
+
+        emit ProofRequestedEvent(uuid, requestId, contractAddress, position, pos, data);
     }
 
 
