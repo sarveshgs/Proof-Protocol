@@ -13,8 +13,8 @@ contract ProofFacilitator {
         bytes32 _requestId,
         address _contractAddress,
         bytes _position,
-        address proofOfStake,
-        bytes data);
+        address _proofOfStake,
+        bytes _data);
 
     struct Registration {
         bytes name;
