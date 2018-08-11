@@ -13,6 +13,7 @@ contract ProofVerifiers {
     {
         uint256 stakeAmount = msg.value;
 
+        require(msg.value > 0);
         require(verifiers[msg.sender] == 0);
 
         verifiers[msg.sender] += stakeAmount;
