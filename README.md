@@ -31,3 +31,12 @@ We want to build a Proof protocol which does below things:
 
 - npm install
 - 
+
+###Contract Addresses Ropsten
+1. Proof Verifiers : 0x58bec60598934f221797810e44a94a771e741ecb 
+
+2. Proof Facilitator : 0x89e19675e50d40c25bb7c9e02e267f1de107ae42
+
+3. Register company UUID : 0x1ba58fc02986a1bf1d2a76e066d0dff9760e1830f79f120877c49bb8ef3db1e8
+
+4. ProofOfStake : 0xe56f7A141F324E5ba1B503e80d3847203fa1223D
