@@ -94,7 +94,7 @@ async function executeTransaction(proofOfStakeAddress, encodedABI) {
       transaction.sign(Buffer.from(account.privateKey.replace('0x', ''), 'hex'));
       return web3Provider.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'))
         .once('transactionHash', (hash) => {
-          console.info("\x1b[30m",'transactionHash', 'https://ropsten.etherscan.io/tx/' + hash);
+          console.info("\x1b[37m",'transactionHash', 'https://ropsten.etherscan.io/tx/' + hash);
         })
         .once('receipt', (receipt) => {
           // console.info('receipt', receipt);
@@ -116,7 +116,7 @@ function printEvent(event) {
   let params = event.returnValues;
   console.log("\x1b[32m", "**************************************************************");
   console.log("\n")
-  console.log("\x1b[30m", "********" + eventName + "**********");
+  console.log("\x1b[37m", "********" + eventName + "**********");
   console.log("\n")
   //console.log("\x1b[32m", "********" + transactionHash + "**********");
   const table = cTable.getTable(params);
