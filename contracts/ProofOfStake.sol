@@ -15,7 +15,7 @@ contract ProofOfStake {
 
     event ProofVerificationStarted(bytes32 _requestId, uint256 _startBlockTime, uint256 _endBlockTime);
     event ProofVerificationDone(address _proofVerifier, bool _isProven);
-    event ProofFinalized(bytes32 _requestId, bool status, uint256 totalVotes, uint256 majorityVotes);
+    event ProofFinalized(bytes32 _requestId, bool _status, uint256 _totalVotes, uint256 _majorityVotes);
 
     uint256 constant majorityThreshold = 67;
     uint256 public proofVerificationStartingBlockNumber;
@@ -78,7 +78,24 @@ contract ProofOfStake {
         emit ProofVerificationDone(msg.sender, isProven);
     }
 
-    // TODO Discuss and refine reward
+    /**
+     * - In Proof of stake system, blocks are said to be ‘forged’ or ‘minted’, not mined.
+     * - Users who validate transactions and create new blocks in this system are referred to as forgers.
+     * - Proof of stake cases, digital currency units are created at the launch of the currency and their number is fixed.
+     * - Rather than using cryptocurrency units as reward, the forgers receive transaction fees as rewards.
+     * - Stake are being held in an escrow account. if they validate a fraudulent transaction,
+     * they lose their holdings, as well as their rights to participate as a forger in the future.
+     * - POS don't provide a way to handle the initial distribution of coins at the founding phase of the cryptocurrency,
+     * so cryptocurrencies which use this system either begin with an ICO and sell their pre-mined coins, or begin with the proof of work system,
+     * and switch over to the proof of stake system later.
+     * ‘Randomized Block Selection’ and the ‘Coin Age Based Selection’
+     * In the randomized block selection method of selection, a formula which looks for the user with the combination of the lowest hash value and the size of their stake.
+     * In Coin age Based selection Users who have staked older and larger sets of coins have a greater chance of being assigned to forge the next block
+     * Peercoin is a proof-of-stake system based cryptocurrency which uses the coin age selection process combined with the randomized selection method.
+     *
+     * Vlad Zamfir is to only partially destroy deposits of validators that get slashed, setting the percentage destroyed to be proportional to the percentage of other
+     * validators that have been slashed recently. This ensures that validators lose all of their deposits in the event of an actual attack, but only a small part of their deposits in the event of a one-off mistake
+     */
     function finalize()
         public
         onlyProofVerifiers
