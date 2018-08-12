@@ -14,7 +14,6 @@ contract ProofOfStake {
     using SafeMath for uint256;
 
     event ProofVerificationStarted(bytes32 _requestId, uint256 _startBlockTime, uint256 _endBlockTime);
-    event ProofVerifierRegistered(address _proofVerifier, bytes32 _requestId);
     event ProofVerificationDone(address _proofVerifier, bool _isProven);
     event ProofFinalized(bytes32 _requestId, bool status, uint256 totalVotes, uint256 majorityVotes);
 
