@@ -28,28 +28,41 @@ facilitatorContract.events.ProofRequestedEvent(null, function (error, ProofReque
   if(error) {
     console.log("error  ", error);
   }
-  console.log("ProofRequestedEvent result  ", ProofRequestedResult);
-
   let currContract = new web3Provider.eth.Contract(proofOfStakeABI);
   transactionObject = currContract.methods.startVoting();
   const startVoting = transactionObject.encodeABI();
 
   let proofOfStakeAddress = ProofRequestedResult.returnValues._proofOfStake;
-  console.log("start voting");
+  console.log("register ing event");
+  registerEvents(proofOfStakeAddress, proofOfStakeABI);
+
   executeTransaction(proofOfStakeAddress, startVoting).then(() => {
     transactionObject = currContract.methods.performVerification(true);
     const performVerification = transactionObject.encodeABI();
-    console.log("perform verification  ");
     executeTransaction(proofOfStakeAddress, performVerification).then(() => {
       transactionObject = currContract.methods.finalize();
       const finalize = transactionObject.encodeABI();
-      console.log("finalize  ");
       executeTransaction(proofOfStakeAddress, finalize).then(() => {
-        console.log("done ");
       });
     });
   });
 });
+
+
+function registerEvents(address, abi) {
+  console.log("Resitering ");
+  let posContract = new web3Provider.eth.Contract(abi, address);
+  posContract.events.ProofVerificationStarted(null, function (error, result) {
+    console.log("Proof verification started");
+  });
+  posContract.events.ProofVerificationDone(null, function (error, result) {
+    console.log("Proof verification submitted");
+  });
+  posContract.events.ProofFinalized(null, function (error, result) {
+    console.log("Proof verification finalized");
+  });
+
+}
 
 async function executeTransaction(proofOfStakeAddress, encodedABI) {
 
@@ -81,13 +94,13 @@ async function executeTransaction(proofOfStakeAddress, encodedABI) {
           console.info('transactionHash', 'https://etherscan.io/tx/' + hash);
         })
         .once('receipt', (receipt) => {
-          console.info('receipt', receipt);
+          // console.info('receipt', receipt);
         })
         /*.on('confirmation', (confirmationNumber, receipt) => {
           console.info('confirmation', confirmationNumber, receipt);
         })*/
         .on('error', (error) => {
-          console.log("recived error ", error);
+          //  console.log("recived error ", error);
         });
     })
     .catch(console.error);
