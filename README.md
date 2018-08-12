@@ -43,6 +43,7 @@ We want to build a Proof protocol which does below things:
 ### Steps To Run on Ropsten
 
 - Clone the git repo on your local
+    
     git clone git@github.com:sarveshgs/Proof-Protocol.git
     
 - Install dependency packages
@@ -56,20 +57,22 @@ We want to build a Proof protocol which does below things:
      - sudo apt-get --allow-unauthenticated install solc
          
 - Install npm packages
+
     cd Proof-Protocol
     npm install
 
 - Run proof verifier node
+
     run node proof_verifier/app.js  
 
 - Load ProofFacilitator In Remix to Perform Transactions
+
     - Using remix connect to ropsten test network. Load contract ProofOfStake with above given address. 
     - Use contracts/abi/ProofOfStake.abi file for abi.
     - Using Remix perform below transaction:
     - ProofFacilitator => requestProof
 
-- That's it!
-  Proof verifier will perform below actions
+- That's it! Proof verifier will perform below actions
     - Generate proof
     - Start Voting
     - Perform Verification
