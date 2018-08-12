@@ -16,7 +16,7 @@ contract ProofOfStake {
     event ProofVerificationStarted(bytes32 _requestId, uint256 _startBlockTime, uint256 _endBlockTime);
     event ProofVerifierRegistered(address _proofVerifier, bytes32 _requestId);
     event ProofVerificationDone(address _proofVerifier, bool _isProven);
-    event ProofFinalized(bytes32 _requestId, bool status);
+    event ProofFinalized(bytes32 _requestId, bool status, uint256 totalVotes, uint256 majorityVotes);
 
     uint256 constant majorityThreshold = 67;
     uint256 public proofVerificationStartingBlockNumber;
@@ -60,21 +60,8 @@ contract ProofOfStake {
         hasProofVerificationStarted = true;
         proofVerificationStartingBlockNumber = block.number;
         proofVerificationEndingBlockNumber = proofVerificationStartingBlockNumber.add(voteWaitTimeInBlocks);
-        register(msg.sender);
 
         emit ProofVerificationStarted(requestId, proofVerificationStartingBlockNumber, proofVerificationEndingBlockNumber);
-    }
-
-    function registerToVote()
-        public
-        onlyProofVerifiers
-    {
-        require(hasProofVerificationStarted == true, "Voting should already be started!");
-        require(block.number <= proofVerificationEndingBlockNumber, "registration is expired!");
-        require(proofVerifiedData[msg.sender].proofVerifier == address(0), "You have already registered!");
-        register(msg.sender);
-
-        emit ProofVerifierRegistered(msg.sender, requestId);
     }
 
     function performVerification(
@@ -84,7 +71,9 @@ contract ProofOfStake {
     {
         require(hasProofVerificationStarted == true, "Voting is not started yet!");
         require(block.number <= proofVerificationEndingBlockNumber, "Voting is expired!");
+        register(msg.sender);
         require(proofVerifiedData[msg.sender].hasVoted == false, "msg.sender has already voted!");
+
         proofVerifiedData[msg.sender].isProven = isProven;
 
         emit ProofVerificationDone(msg.sender, isProven);
@@ -97,7 +86,8 @@ contract ProofOfStake {
         returns (bool)
     {
         require(hasProofVerificationStarted == true);
-        require(block.number > proofVerificationEndingBlockNumber);
+        /** TODO uncomment below line after ethindia winning presentation */
+        //require(block.number > proofVerificationEndingBlockNumber);
 
         uint256 totalVotes = proofVerifiers.length;
         uint256 positiveVotes = 0;
@@ -115,10 +105,10 @@ contract ProofOfStake {
         }
 
         if (positiveVotes>negativeVotes){
-            emit ProofFinalized(requestId, true);
+            emit ProofFinalized(requestId, true, totalVotes, positiveVotes);
             return true;
         } else {
-            emit ProofFinalized(requestId, false);
+            emit ProofFinalized(requestId, false, totalVotes, negativeVotes);
             return false;
         }
     }
