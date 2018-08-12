@@ -35,8 +35,8 @@ We want to build a Proof protocol which does below things:
 ###Contract Addresses Ropsten
 1. Proof Verifiers : 0x58bec60598934f221797810e44a94a771e741ecb 
 
-2. Proof Facilitator : 0xafe05a930968ea3e67d5692c99170b570e206b57   
+2. Proof Facilitator : 0x3589353f0c0b258976470cb95f676baff9c6513d   
 
-3. Register company UUID : 0x1ba58fc02986a1bf1d2a76e066d0dff9760e1830f79f120877c49bb8ef3db1e8
+3. Register  UUID : 0xc6a88d8abdbfd698ca096d21fc12ea61cda66ef773234de61f4adea81337625a
 
 4. ProofOfStake : 0xe56f7A141F324E5ba1B503e80d3847203fa1223D

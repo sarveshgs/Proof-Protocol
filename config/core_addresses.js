@@ -24,7 +24,7 @@ const allAddresses = {
 
   contracts: {
     proofFacilitator: {
-      address: '0xafe05a930968ea3e67d5692c99170b570e206b57',
+      address: '0x3589353f0c0b258976470cb95f676baff9c6513d',
       abi: coreAbis.proofFacilitator,
       bin: coreBins.proofFacilitator
     },
