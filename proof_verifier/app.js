@@ -17,6 +17,8 @@ const rootPrefix = '../'
   , Tx = require('ethereumjs-tx')
 ;
 
+const cTable = require('console.table');
+
 web3Provider.eth.getBlock('latest').then((data) => {
     console.log(data);
 });
@@ -28,12 +30,14 @@ facilitatorContract.events.ProofRequestedEvent(null, function (error, ProofReque
   if(error) {
     console.log("error  ", error);
   }
+
+  printEvent(ProofRequestedResult);
+
   let currContract = new web3Provider.eth.Contract(proofOfStakeABI);
   transactionObject = currContract.methods.startVoting();
   const startVoting = transactionObject.encodeABI();
 
   let proofOfStakeAddress = ProofRequestedResult.returnValues._proofOfStake;
-  console.log("register ing event");
   registerEvents(proofOfStakeAddress, proofOfStakeABI);
 
   executeTransaction(proofOfStakeAddress, startVoting).then(() => {
@@ -50,16 +54,15 @@ facilitatorContract.events.ProofRequestedEvent(null, function (error, ProofReque
 
 
 function registerEvents(address, abi) {
-  console.log("Resitering ");
   let posContract = new web3Provider.eth.Contract(abi, address);
   posContract.events.ProofVerificationStarted(null, function (error, result) {
-    console.log("Proof verification started");
+    printEvent(result);
   });
   posContract.events.ProofVerificationDone(null, function (error, result) {
-    console.log("Proof verification submitted");
+    printEvent(result);
   });
   posContract.events.ProofFinalized(null, function (error, result) {
-    console.log("Proof verification finalized");
+    printEvent(result);
   });
 
 }
@@ -91,7 +94,7 @@ async function executeTransaction(proofOfStakeAddress, encodedABI) {
       transaction.sign(Buffer.from(account.privateKey.replace('0x', ''), 'hex'));
       return web3Provider.eth.sendSignedTransaction('0x' + transaction.serialize().toString('hex'))
         .once('transactionHash', (hash) => {
-          console.info('transactionHash', 'https://etherscan.io/tx/' + hash);
+          console.info("\x1b[30m",'transactionHash', 'https://ropsten.etherscan.io/tx/' + hash);
         })
         .once('receipt', (receipt) => {
           // console.info('receipt', receipt);
@@ -104,6 +107,23 @@ async function executeTransaction(proofOfStakeAddress, encodedABI) {
         });
     })
     .catch(console.error);
+}
+
+
+function printEvent(event) {
+  let eventName = event.event;
+  let transactionHash = event.transactionHash;
+  let params = event.returnValues;
+  console.log("\x1b[32m", "**************************************************************");
+  console.log("\n")
+  console.log("\x1b[30m", "********" + eventName + "**********");
+  console.log("\n")
+  //console.log("\x1b[32m", "********" + transactionHash + "**********");
+  const table = cTable.getTable(params);
+  console.log("\x1b[32m", table);
+  console.log("\n")
+
+
 }
 
 

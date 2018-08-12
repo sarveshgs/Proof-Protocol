@@ -11,7 +11,8 @@
   "devDependencies": {},
   "dependencies": {
     "bignumber.js": "4.1.0",
-    "web3": "^1.0.0-beta.35",
-    "ethereumjs-tx": "^1.3.4"
+    "console.table": "^0.10.0",
+    "ethereumjs-tx": "^1.3.4",
+    "web3": "^1.0.0-beta.35"
   }
 }
