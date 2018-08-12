@@ -73,6 +73,7 @@ contract ProofOfStake {
         register(msg.sender);
         require(proofVerifiedData[msg.sender].hasVoted == false, "msg.sender has already voted!");
 
+        proofVerifiedData[msg.sender].hasVoted = true;
         proofVerifiedData[msg.sender].isProven = isProven;
 
         emit ProofVerificationDone(msg.sender, isProven);
